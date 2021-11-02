@@ -3,20 +3,18 @@
 // let d = [3,2,1,4,2,10,12]
 
 /* function sort (arr) {
-  let miniIndex, temp
-  for (let i = 0; i < arr.length - 1; i++) {
-    miniIndex = i
+  for (let i = 0; i < arr.length - 1; i++) { // 外层循环，每次可以找到一个最小值放置i处
+    let miniIndex = i  // 初始最小值下标
     for (let j = i + 1; j < arr.length; j++) {
       if (arr[j] < arr[miniIndex]) {
-        miniIndex = j
+        miniIndex = j // 找到最小值下标
       }
     }
-    if (i !== miniIndex) {
-      temp = arr[i]
+    if (i !== miniIndex) { // 最小值需与下标为i的位置交换
+      let temp = arr[i]
       arr[i] = arr[miniIndex]
       arr[miniIndex] = temp
     }
-    console.log(arr);
   }
   return arr
 } */
@@ -38,44 +36,42 @@
   }
   return arr
 } */
-let d = [3,4,1,4,2,10,12]
+// let d = [4,3]
+let d = [3,2,1,4,2,10,12]
 
 // 3.快速排序
 // 找到基准，递归排序
-// function sort(arr, left, right) {
-//   let len = arr.length
-//   if (len < 2) return arr
-//   var left = left || 0
-//   var right = right || len - 1
-//   if (left < right - 1) {
-//     let index = find(arr, left, right)
-//     sort(arr, left, index)
-//     sort(arr, index + 1, right)
-//   }
-//   return arr
-// }
+/* function sort(arr, left, right) {
+  let len = arr.length
+  var left = left || 0
+  var right = right === undefined ? len - 1 : right // 原先 right || len - 1 有问题，当right为0时又会赋值len - 1导致死循环
+  if (left < right) {
+    let index = find(arr, left, right) // 找到基准
+    sort(arr, left, index - 1) // 左侧继续递归
+    sort(arr, index + 1, right) // 右侧继续递归
+  }
+  return arr
+}
 
-// function find(arr, left, right) {
-//   // console.log(arr, left, right);
-//   let curr = arr[left] // 基准
-//   let index= left + 1
-//   for (let i = left + 1; i < right; i++) {
-//     if (arr[i] < curr) {
-//       if (i != index) {
-//         let temp = arr[i]
-//         arr[i] = arr[index]
-//         arr[index] = temp
-//       }
-//       index++
-//     }
+function find(arr, left, right) {
+  let curr = arr[left] // 选取第一个元素作为基准
+  let index = left
+  for (let i = left + 1; i <= right; i++) { // 从第二个元素开始遍历
+    if (arr[i] < curr) {
+      if (i != index + 1) {
+        let temp = arr[i]
+        arr[i] = arr[index + 1]
+        arr[index + 1] = temp
+      }
+      index++
+    }
     
-//   }
+  }
 
-//   arr[left] = arr[index - 1]
-//   arr[index - 1] = curr
-//   // console.log(arr);
-//   return index - 1
-// }
+  arr[left] = arr[index]
+  arr[index] = curr
+  return index
+} */
 
 
 // 4.冒泡排序
@@ -100,20 +96,13 @@ let d = [3,4,1,4,2,10,12]
 // 4）gap最后须为1
 // 5）直接插入适合链式结构，希尔排序不适合
 
-function sort(arr) {
+/* function sort(arr) {
   let gap = Math.floor(arr.length/2)
 
   for (;gap > 0; gap = Math.floor(gap/2)) {
     console.log(gap);
     let preIndex
     for (let i = gap; i < arr.length; i++) {
-      // preIndex = i
-      // let temp = arr[i]
-      // while (i - gap >= 0 && arr[i - gap] > temp) {
-      //   arr[preIndex] = arr[i - gap]
-      //   preIndex -= gap
-      // }
-      // arr[preIndex + gap] = temp
 
       preIndex = i - gap
       let temp = arr[i]
@@ -125,16 +114,24 @@ function sort(arr) {
     }
   }
   return arr
+} */
+
+// 快速排序借助数组实现
+function sort(arr) {
+  if (arr.length <= 1) return arr
+  let leftArr = []
+  let rightArr = []
+  let curr = arr[0]
+  let middleIndex = 0
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] < curr) {
+      leftArr.push(arr[i])
+      middleIndex++
+    } else {
+      rightArr.push(arr[i])
+    }
+  }
+  return sort(leftArr).concat([curr]).concat(sort(rightArr))
 }
-
-
-
-
-
-
-
-
-
-
 
 console.log(sort(d));
