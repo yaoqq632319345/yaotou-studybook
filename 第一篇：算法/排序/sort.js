@@ -117,7 +117,7 @@ function find(arr, left, right) {
 } */
 
 // 快速排序借助数组实现
-function sort(arr) {
+/* function sort(arr) {
   if (arr.length <= 1) return arr
   let leftArr = []
   let rightArr = []
@@ -132,6 +132,6 @@ function sort(arr) {
     }
   }
   return sort(leftArr).concat([curr]).concat(sort(rightArr))
-}
+} */
 
 console.log(sort(d));
