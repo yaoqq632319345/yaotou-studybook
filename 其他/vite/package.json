@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@vue/compiler-dom": "^3.2.21",
+    "@vue/compiler-sfc": "^3.2.21",
     "express": "^4.17.1",
     "koa": "^2.13.4",
     "vue": "^3.2.21"

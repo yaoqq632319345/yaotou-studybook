@@ -2,6 +2,8 @@ const Koa = require('koa')
 const fs = require('fs')
 const path = require('path')
 const app = new Koa()
+const compilerSfc = require('@vue/compiler-sfc')
+const compilerDom = require('@vue/compiler-dom')
 
 function rewriteImport (content) {
   return content.replace(/ from ['|"]([^'"]+)['|"]/g, function (s0, s1) {
@@ -15,7 +17,7 @@ function rewriteImport (content) {
 }
 
 app.use(async (ctx) => {
-  const {request: {url}} = ctx
+  const {request: {url, query}} = ctx
   if (url ==='/') {
     ctx.type = 'text/html'
     const content = fs.readFileSync('./index.html', 'utf-8')
@@ -42,6 +44,44 @@ app.use(async (ctx) => {
     const content = fs.readFileSync(p, 'utf-8')
     ctx.type = 'application/javascript'
     ctx.body = rewriteImport(content)
+  } else if (url.indexOf('.vue') > -1) {
+    const p = path.resolve(__dirname, url.split('?')[0].slice(1))
+    const {descriptor} = compilerSfc.parse(fs.readFileSync(p, 'utf-8'))
+    
+    if (!query.type) {
+      ctx.type = 'application/javascript'
+      ctx.body = `${rewriteImport(
+        descriptor.script.content.replace('export default', 'const __script = ')
+      )}
+      import {render as __render} from "${url}?type=template"
+      __script.render = __render
+      export default __script
+      `
+    } else {
+      const render = compilerDom.compile(descriptor.template.content, {mode: 'module'}).code
+      ctx.type = 'application/javascript'
+      ctx.body = rewriteImport(render)
+    }
+    
+  } else if (url.endsWith('.css')) {
+    const p = path.resolve(__dirname, url.slice(1))
+
+    const file = fs.readFileSync(p, 'utf-8')
+
+    const content = `
+      const css = "${file.replace(/\n/g, '')}"
+
+      const link = document.createElement('style')
+      link.setAttribute('type', 'text/css')
+      document.head.appendChild(link)
+      link.innerHTML = css
+      export default css
+      
+
+    `
+
+    ctx.type = 'application/javascript'
+    ctx.body = content
   }
 })
 app.listen(3000, () => console.log(`Example app listening on port port!`))
