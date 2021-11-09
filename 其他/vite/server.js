@@ -69,7 +69,7 @@ app.use(async (ctx) => {
     const file = fs.readFileSync(p, 'utf-8')
 
     const content = `
-      const css = "${file.replace(/\n/g, '')}"
+      const css = "${file.replace(/\r|\n/g, '')}"
 
       const link = document.createElement('style')
       link.setAttribute('type', 'text/css')
