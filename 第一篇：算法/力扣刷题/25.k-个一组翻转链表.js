@@ -18,41 +18,44 @@
  * @return {ListNode}
  */
 var reverseKGroup = function(head, k) {
+  let hair = new ListNode(0, head)
+  let pre = tail = hair
+
+  while (head) {
+    console.log(head);
+    let n = k
+    while (n--) {
+      tail = tail.next
+      if (!tail) {
+        console.log(tail);
+        return hair.next
+      }
+    }
+    let next = tail.next
+    tail.next = null;
+    [head, tail] = reverse(head, tail)
+    pre.next = head
+
+    pre = tail
+    tail.next = next
+    head = next
+    console.log(head);
+  }
+
+
   function reverse(head, tail) {
-    let prev = tail.next
+    let pre = tail.next
     let p = head
-    while (prev != tail) {
+    while (p) {
       let next = p.next
-      p.next = prev
-      prev = p
+      p.next = pre
+      pre = p
       p = next
     }
     return [tail, head]
   }
-
-  let hair = new ListNode(0)
-  hair.next = head
-  let pre = hair
-
-  while (head) {
-    let tail = pre
-    let i = k
-    while (i--) {
-      tail = tail.next
-      if (!tail) {
-        return hair.next
-      }
-    }
-
-    let next = tail.next; // 缓存下次的头节点 (不写分号，花了半天时间找bug)
-    [head, tail] = reverse(head, tail)
-    pre.next = head // 链接翻转之后的头节点
-
-    tail.next = next // 新的尾节点链接下次的头节点
-    pre = tail // 这次的尾节点是下次的头节点之前
-    head = next // 下一次的头节点赋值
-  }
   return hair.next
+
 };
 // @lc code=end
 
