@@ -18,7 +18,7 @@
  * @param {Node} head
  * @return {Node}
  */
-/* var copyRandomList = function (head) {
+var copyRandomList = function (head) {
   if (!head) return head;
   let p = head,
     q;
@@ -29,10 +29,10 @@
     p = q.next;
   }
   // 第二轮循环 修正复制节点的random指针
-  p = head.next;
+  p = head;
   while (p) {
-    if (p.random) p.random = p.random.next;
-    if (p.next) p = p.next.next;
+    if (p.random) p.next.random = p.random.next;
+    p = p.next.next
   }
   p = head;
   let newHead = head.next;
@@ -43,19 +43,19 @@
     p = p.next;
   }
   return newHead;
-}; */
-
-var copyRandomList = function (head, cachedNode = new Map()) {
-  if (head === null) {
-    return null;
-  }
-  if (!cachedNode.has(head)) {
-    cachedNode.set(head, { val: head.val });
-    Object.assign(cachedNode.get(head), {
-      next: copyRandomList(head.next, cachedNode),
-      random: copyRandomList(head.random, cachedNode),
-    });
-  }
-  return cachedNode.get(head);
 };
+
+// var copyRandomList = function (head, cachedNode = new Map()) {
+//   if (head === null) {
+//     return null;
+//   }
+//   if (!cachedNode.has(head)) {
+//     cachedNode.set(head, { val: head.val });
+//     Object.assign(cachedNode.get(head), {
+//       next: copyRandomList(head.next, cachedNode),
+//       random: copyRandomList(head.random, cachedNode),
+//     });
+//   }
+//   return cachedNode.get(head);
+// };
 // @lc code=end
