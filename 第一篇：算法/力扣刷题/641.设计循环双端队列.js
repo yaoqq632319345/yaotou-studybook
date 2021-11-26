@@ -8,86 +8,96 @@
 /**
  * @param {number} k
  */
-var MyCircularDeque = function(k) {
-  this._arr = new Array(k)
-  this._head = 0
-  this._tail = 0
-  this._len = 0
+ var MyCircularDeque = function(k) {
+  this.arr = new Array(k)
+  this.cnt = 0
+  this.head = 0
+  this.tail = 0
 };
 
 /** 
- * @param {number} value
- * @return {boolean}
- */
+* @param {number} value
+* @return {boolean}
+*/
 MyCircularDeque.prototype.insertFront = function(value) {
   if (this.isFull()) return false
-  if (this.isEmpty()) return this.insertLast(value) // 第一次修改
-  this._head = (this.head - 1 + this._arr.length) % this._arr.length
-  this._arr[this._head] = value
-  this._len++
+  this.arr[this.head] = value
+  this.cnt++
+  if (this.head === this.tail && !this.isFull()) {
+      this.tail =  (this.tail + 1)% this.arr.length
+  }
+  this.head = (this.head + this.arr.length  - 1) % this.arr.length
+  // console.log(this)
   return true
 };
 
 /** 
- * @param {number} value
- * @return {boolean}
- */
+* @param {number} value
+* @return {boolean}
+*/
 MyCircularDeque.prototype.insertLast = function(value) {
   if (this.isFull()) return false
-  this._arr[this._tail] = value
-  this._tail = (this._tail + 1) % this._arr.length
-  this._len++
+  this.arr[this.tail] = value
+  this.cnt++
+  if (this.head === this.tail && !this.isFull()) {
+      this.head = (this.head + this.arr.length  - 1) % this.arr.length
+  }
+  this.tail = (this.tail + 1) % this.arr.length
+
   return true
 };
 
 /**
- * @return {boolean}
- */
+* @return {boolean}
+*/
 MyCircularDeque.prototype.deleteFront = function() {
   if (this.isEmpty()) return false
-  this._head = (this.head + 1) % this._arr.length
-  this._len--
+  this.cnt--
+  this.head = (this.head + 1) % this.arr.length
   return true
 };
 
 /**
- * @return {boolean}
- */
+* @return {boolean}
+*/
 MyCircularDeque.prototype.deleteLast = function() {
   if (this.isEmpty()) return false
-  this._tail = (this._tail - 1 + this._arr.length) % this._arr.length
-  this._len--
+  this.cnt--
+  this.tail = (this.tail + this.arr.length - 1) % this.arr.length
   return true
 };
 
 /**
- * @return {number}
- */
+* @return {number}
+*/
 MyCircularDeque.prototype.getFront = function() {
   if (this.isEmpty()) return -1
-  return this._arr[this._head]
+  const idx = (this.head + 1) % this.arr.length
+  return this.arr[idx]
 };
 
 /**
- * @return {number}
- */
+* @return {number}
+*/
 MyCircularDeque.prototype.getRear = function() {
+  console.log(this.tail, this.arr)
   if (this.isEmpty()) return -1
-  return this._arr[(this._tail - 1 + this._arr.length) % this._arr.length]
+  const idx = (this.tail + this.arr.length - 1) % this.arr.length
+  return this.arr[idx]
 };
 
 /**
- * @return {boolean}
- */
+* @return {boolean}
+*/
 MyCircularDeque.prototype.isEmpty = function() {
-  return this._len === 0
+  return this.cnt === 0
 };
 
 /**
- * @return {boolean}
- */
+* @return {boolean}
+*/
 MyCircularDeque.prototype.isFull = function() {
-  return this._len === this._arr.length
+  return this.cnt === this.arr.length
 };
 
 /**

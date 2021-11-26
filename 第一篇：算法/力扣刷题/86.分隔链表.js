@@ -18,22 +18,26 @@
  * @return {ListNode}
  */
 var partition = function(head, x) {
-  let newHead = new ListNode(), newHead2 = new ListNode() // 创建两个虚拟头节点
-  let p = head, s = newHead, b = newHead2 // 指针p指向原链表，s,b指向新的两个链表
-  while (p) {
-    let q = p.next // 缓存p的下一个节点
-    p.next = null  // 断开p节点
-    if (p.val < x) { // 小于x放入s后边，s后移
-      s.next = p
-      s = p
-    } else { // else 放入b后边，b后移
-      b.next = p
-      b = p
+  if (!head) return head
+    let hairMin = new ListNode(0), newHeadMin = hairMin;
+    let hairMax = new ListNode(0), newHeadMax = hairMax;
+    let p = head;
+
+    while (p) {
+        let next = p.next;
+        p.next = null
+        if (p.val < x) {
+            newHeadMin.next = p;
+        console.log(newHeadMin)
+            newHeadMin = p;
+        } else {
+            newHeadMax.next = p;
+            newHeadMax = p;
+        }
+        p = next;
     }
-    p = q // p后移
-  }
-  s.next = newHead2.next
-  return newHead.next
+    newHeadMin.next = hairMax.next;
+    return hairMin.next
 };
 // @lc code=end
 
