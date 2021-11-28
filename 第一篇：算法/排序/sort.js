@@ -2,18 +2,20 @@
 // 思路：在未排序中找到最小元素，存放在起始位置
 // let d = [3,2,1,4,2,10,12]
 
-/* function sort (arr) {
-  for (let i = 0; i < arr.length - 1; i++) { // 外层循环，每次可以找到一个最小值放置i处
-    let miniIndex = i  // 初始最小值下标
+/* function sort(arr) {
+  let min , minIndex
+  for (let i = 0; i < arr.length; i++) {
+    min = arr[i], minIndex = i
     for (let j = i + 1; j < arr.length; j++) {
-      if (arr[j] < arr[miniIndex]) {
-        miniIndex = j // 找到最小值下标
+      if (arr[j] < min) {
+        min = arr[j]
+        minIndex = j
       }
     }
-    if (i !== miniIndex) { // 最小值需与下标为i的位置交换
-      let temp = arr[i]
-      arr[i] = arr[miniIndex]
-      arr[miniIndex] = temp
+
+    if (minIndex != i) {
+      arr[minIndex] = arr[i]
+      arr[i] = min
     }
   }
   return arr
@@ -22,57 +24,54 @@
 // 2.插入排序
 // 插牌的原理
 /* function sort(arr) {
-  const len = arr.length
-  let preIndex, curr
-  for (let i = 1; i < len; i++) {
-    preIndex = i - 1
-    curr = arr[i]
-    while (preIndex >= 0 && arr[preIndex] > curr) {
-      arr[preIndex + 1] = arr[preIndex]
-      // arr[preIndex] = curr // 我的代码
-      preIndex--
+  for (let i = 1; i < arr.length; i++) {
+    let curr = arr[i]
+    let j = i - 1
+    while (j >= 0 && curr < arr[j]) {
+      arr[j+1] = arr[j]
+      j--;
     }
-    arr[preIndex + 1] = curr
+    arr[j+1] = curr
   }
   return arr
 } */
 // let d = [4,3]
-let d = [3,2,1,4,2,10,12]
+let d = [3, 2, 1, 4, 2, 10, 12];
 
 // 3.快速排序
 // 找到基准，递归排序
 /* function sort(arr, left, right) {
-  let len = arr.length
-  var left = left || 0
-  var right = right === undefined ? len - 1 : right // 原先 right || len - 1 有问题，当right为0时又会赋值len - 1导致死循环
+  var left = left || 0;
+  var right = right === undefined ? arr.length - 1 : right
+  
   if (left < right) {
-    let index = find(arr, left, right) // 找到基准
-    sort(arr, left, index - 1) // 左侧继续递归
-    sort(arr, index + 1, right) // 右侧继续递归
+    let mid = find(arr, left, right)
+    sort(arr, left, mid - 1)
+    sort(arr, mid + 1, right)
   }
   return arr
 }
 
 function find(arr, left, right) {
-  let curr = arr[left] // 选取第一个元素作为基准
-  let index = left
-  for (let i = left + 1; i <= right; i++) { // 从第二个元素开始遍历
-    if (arr[i] < curr) {
-      if (i != index + 1) {
-        let temp = arr[i]
-        arr[i] = arr[index + 1]
-        arr[index + 1] = temp
-      }
-      index++
+  let num = arr[left]
+  let numI = left
+  for (let i = left + 1; i <= right; i++) {
+    if (arr[i] < num) { // 如果比基准小，就放在基准的右侧， [num, 小, 小, 小, 大, 大]
+      // arr[i] 与 arr[numI] 右侧 + 1位置互换
+      let temp = arr[i]
+      arr[i] = arr[numI + 1]
+      arr[numI + 1] = temp
+
+      numI++ // 记录实际num位置
     }
-    
   }
 
-  arr[left] = arr[index]
-  arr[index] = curr
-  return index
+  // [小, 小, 小, num, 大, 大]
+  // 遍历完成实际numI位置还没有完成互换
+  arr[left] = arr[numI]
+  arr[numI] = num
+  return numI
 } */
-
 
 // 4.冒泡排序
 /* function sort(arr) {
@@ -115,6 +114,24 @@ function find(arr, left, right) {
   }
   return arr
 } */
+function sort(arr) {
+  let gap = arr.length >> 1
+  // console.log(gap);
+  // return arr
+  for (; gap > 0; gap = gap >> 1) {
+    for (let j = gap; j < arr.length; j += gap) {
+      let temp = arr[j]
+      let k = j - gap;
+
+      while (k >= 0 && arr[k] > temp) {
+        arr[k+gap] = arr[k]
+        k -= gap
+      }
+      arr[k+gap] = temp
+    }
+  }
+  return arr
+}
 
 // 快速排序借助数组实现
 /* function sort(arr) {
