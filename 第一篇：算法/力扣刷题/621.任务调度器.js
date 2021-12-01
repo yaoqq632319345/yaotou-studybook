@@ -32,12 +32,7 @@ var leastInterval = function(tasks, n) {
       if (val === max && key != maxK) {res++}
   }
   // n值比较小的情况下，没有空闲时间
-  let p = 0
-  if (n*(max-1) < tasks.length - max) {
-      p = tasks.length
-  }
-
-  return Math.max(res, p) // 取最大值
+  return Math.max(res, tasks.length) // 取最大值
 };
 // @lc code=end
 
