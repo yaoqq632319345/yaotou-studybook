@@ -10,105 +10,63 @@
  * @param {number[]} nums
  */
  var KthLargest = function(k, nums) {
-  this.k = k;
-  this.heap = new MinHeap();
-  for (const x of nums) {
-      this.add(x);
-  }
+    this.arr = []
+    this.k = k
+    for (let i = 0; i < nums.length; i++) {
+        this.add(nums[i], true)
+    }
 };
 
-KthLargest.prototype.add = function(val) {
-  this.heap.offer(val);
-  if (this.heap.size() > this.k) {
-      this.heap.poll();
-  }
-  return this.heap.peek();
+/** 
+ * @param {number} val
+ * @return {number}
+ */
+KthLargest.prototype.add = function(val, flag) {
+    if (!this.arr.length || this.arr.length < this.k) {
+        this.arr.push(val)
+        this.up(this.arr.length - 1)
+    } else {
+        if (val > this.arr[0]) {
+            this.arr[0] = val
+            this.down(0)
+        }
+    }
+    // console.log(this.arr)
+    if (!flag) {
+        return this.arr[0]
+    }
 };
+KthLargest.prototype.swap = function(i, j) {
+    let temp = this.arr[i]
+    this.arr[i] = this.arr[j]
+    this.arr[j] = temp
+};
+KthLargest.prototype.up = function(idx) {
+    while (idx > 0) {
+        let parent = (idx - 1) >> 1
+        if (this.arr[idx] < this.arr[parent]) {
+            this.swap(idx, parent)
+            idx = parent
+        } else {
+            break
+        }
+    }
+};
+KthLargest.prototype.down = function(idx) {
+    let minI = idx * 2 + 1
+    let min = this.arr[minI] === undefined ? Infinity : this.arr[minI]
+    let right = this.arr[minI + 1] === undefined ? Infinity : this.arr[minI + 1]
+    
+    if (right < min) {
+        min = right
+        minI = minI + 1
+    }
 
-class MinHeap {
-  constructor(data = []) {
-      this.data = data;
-      this.comparator = (a, b) => a - b;
-      this.heapify();
-  }
-
-  heapify() {
-      if (this.size() < 2) return;
-      for (let i = 1; i < this.size(); i++) {
-      this.bubbleUp(i);
-      }
-  }
-
-  peek() {
-      if (this.size() === 0) return null;
-      return this.data[0];
-  }
-
-  offer(value) {
-      this.data.push(value);
-      this.bubbleUp(this.size() - 1);
-  }
-
-  poll() {
-      if (this.size() === 0) {
-          return null;
-      }
-      const result = this.data[0];
-      const last = this.data.pop();
-      if (this.size() !== 0) {
-          this.data[0] = last;
-          this.bubbleDown(0);
-      }
-      return result;
-  }
-
-  bubbleUp(index) {
-      while (index > 0) {
-          const parentIndex = (index - 1) >> 1;
-          if (this.comparator(this.data[index], this.data[parentIndex]) < 0) {
-              this.swap(index, parentIndex);
-              index = parentIndex;
-          } else {
-              break;
-          }
-      }
-  }
-
-  bubbleDown(index) {
-      const lastIndex = this.size() - 1;
-      while (true) {
-          const leftIndex = index * 2 + 1;
-          const rightIndex = index * 2 + 2;
-          let findIndex = index;
-          if (
-              leftIndex <= lastIndex &&
-              this.comparator(this.data[leftIndex], this.data[findIndex]) < 0
-          ) {
-              findIndex = leftIndex;
-          }
-          if (
-              rightIndex <= lastIndex &&
-              this.comparator(this.data[rightIndex], this.data[findIndex]) < 0
-          ) {
-              findIndex = rightIndex;
-          }
-          if (index !== findIndex) {
-              this.swap(index, findIndex);
-              index = findIndex;
-          } else {
-              break;
-          }
-      }
-  }
-
-swap(index1, index2) {
-      [this.data[index1], this.data[index2]] = [this.data[index2], this.data[index1]];
-  }
-
-  size() {
-      return this.data.length;
-  }
-}
+    if (min < this.arr[idx]) {
+        this.swap(idx, minI)
+        this.down(minI)
+    }
+};
 
 /**
  * Your KthLargest object will be instantiated and called as such:
