@@ -114,7 +114,7 @@ function find(arr, left, right) {
   }
   return arr
 } */
-function sort(arr) {
+/* function sort(arr) {
   let gap = arr.length >> 1
   // console.log(gap);
   // return arr
@@ -131,7 +131,7 @@ function sort(arr) {
     }
   }
   return arr
-}
+} */
 
 // 快速排序借助数组实现
 /* function sort(arr) {
@@ -151,4 +151,23 @@ function sort(arr) {
   return sort(leftArr).concat([curr]).concat(sort(rightArr))
 } */
 
+
+
+// 快速排序
+function sort(arr, l, r) {
+  let x = l || 0;
+  let y = r === undefined ? arr.length - 1 : r;
+  if (x >= y) return;
+  let base = arr[x];
+  while (x < y) {
+    while (x < y && arr[y] >= base) y--;
+    if (x < y) arr[x++] = arr[y];
+    while (x < y && arr[x] <= base) x++;
+    if (x < y) arr[y--] = arr[x];
+  }
+  arr[x] = base;
+  sort(arr, l, x - 1);
+  sort(arr, x + 1, r);
+  return arr
+}
 console.log(sort(d));
