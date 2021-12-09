@@ -9,41 +9,34 @@
  * @param {number[]} nums
  * @return {number}
  */
- var searchInsert = function(nums, target) {
-  let left = 0, right = nums.length - 1, mid, res = nums.length
-
-  while (left <= right) {
-    mid = (left + right) >> 1
-    if (nums[mid] === target) {
-      return mid
-    }
-    if (target < nums[mid]) {
-      res = mid
-      right = mid - 1
-    } else {
-      left = mid + 1
-    }
-  }
-  return res
-};
 var lengthOfLIS = function(nums) {
-  const len = nums.length
-  if (len <= 1) {
-    return len
-  }
-  const dp = [nums[0]]
-  let max = 1
+  let len = nums.length
+
+  let dp = [nums[0]]
+
   for (let i = 1; i < len; i++) {
-    if (nums[i] > dp[max - 1]) {
-      dp[max++] = nums[i]
-      continue
-    }
-    let index = searchInsert(dp, nums[i])
-
-    dp[index] = nums[i]
-
+      if (nums[i] > dp[dp.length - 1]) { // 如果比dp最后一位大，直接插入
+          dp.push(nums[i])
+          continue
+      }
+      // 否则二分查找替换掉
+      let left = 0
+          , right = dp.length - 1
+          , mid
+          , pos = 0
+      while (left <= right) {
+          mid = (left + right) >> 1
+          if (nums[i] > dp[mid]) {
+              left = mid + 1
+              pos = mid + 1
+          } else {
+              right = mid - 1
+              pos = mid
+          }
+      }
+      dp[pos] = nums[i]
   }
-  return max
+  return dp.length
 };
 // @lc code=end
 
