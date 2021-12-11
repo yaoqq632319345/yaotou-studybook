@@ -57,4 +57,35 @@ var sortList = function (head) {
 
   return newNodeMin;
 };
+
+/* var sortList = function(head) {
+    if (!head || !head.next) return head
+    let p = head, q = head.next.next
+    while (q && q.next) {
+        p = p.next
+        q = q.next.next
+    }
+
+    q = p.next
+    p.next = null
+    // console.log(head, q)
+
+    p = sortList(head)
+    q = sortList(q)
+
+    let hair = new ListNode(0)
+    k = hair
+    while (p || q) {
+        if (!q || (p && p.val < q.val)) {
+            k.next = p
+            k = p
+            p = p.next
+        } else {
+            k.next = q
+            k = q
+            q = q.next
+        }
+    }
+    return hair.next
+}; */
 // @lc code=end
