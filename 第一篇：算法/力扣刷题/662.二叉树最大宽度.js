@@ -17,37 +17,31 @@
  * @param {TreeNode} root
  * @return {number}
  */
-var widthOfBinaryTree = function(root) {
+ var widthOfBinaryTree = function(root) {
   if (!root) return 0
-  let arr = []
-  arr.push({
-    node: root,
-    index: 0
-  })
-  let res = 1
-  let temp
-  do {
-    temp = []
-    for (let i = 0; i < arr.length; i ++) {
-      const index = arr[i].index - arr[0].index // 数据太大，做处理
-      if (arr[i].node.left) temp.push({
-        node: arr[i].node.left,
-        index: index * 2 // 数据太大
-      })
-      if (arr[i].node.right) temp.push({
-        node: arr[i].node.right,
-        index: index * 2 + 1 // 数据太大
-      })
-    }
-    arr = temp
-    
-    if (arr.length) {
-      let curr = arr[arr.length - 1].index - arr[0].index + 1 
-      console.log(curr);
-      res = res > curr ? res : curr
-    }
-  } while (arr.length)
+  let arr = [[root, 0]]
 
+  let res = 1
+  while (arr.length) {
+      let temp = []
+      for (let i = 0; i < arr.length; i++) {
+          let index = arr[i][1] - arr[0][1]
+
+          if (arr[i][0].left) {
+              temp.push([arr[i][0].left, index * 2])
+          }
+          if (arr[i][0].right) {
+              temp.push([arr[i][0].right, index * 2 + 1])
+          }
+      }
+      arr = temp
+
+      if (arr.length) {
+          let w = arr[arr.length - 1][1] - arr[0][1] +1
+
+          res = Math.max(w, res)
+      }
+  }
   return res
 };
 // @lc code=end
