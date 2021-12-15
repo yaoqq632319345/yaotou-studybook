@@ -14,13 +14,17 @@ class Heap {
 
   pop () {
     if (this.size() == 0) return null
-    let res = this.arr[0]
+    if (this.size() > 1) {
+      let res = this.arr[0]
 
-    this.arr[0] = this.arr.pop()
-    
-    this.down(0)
+      this.arr[0] = this.arr.pop()
+      
+      this.down(0)
 
-    return res
+      return res
+    } else {
+      return this.arr.pop()
+    }
   }
   push (val) {
     this.arr.push(val)
