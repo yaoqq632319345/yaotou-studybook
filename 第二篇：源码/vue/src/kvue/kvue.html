@@ -1,0 +1,16 @@
+<div id="app">
+  <h1>{{counter}}</h1>
+</div>
+<script src="./kvue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      count: 1
+    }
+  })
+
+  setInterval(() => {
+    app.count++
+  }, 1000)
+</script>
