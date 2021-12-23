@@ -1,5 +1,7 @@
 <div id="app">
-  <h1>{{counter}}</h1>
+  <h1>{{count}}</h1>
+  <p v-text="count"></p>
+  <P v-html="html"></P>
 </div>
 <script src="./1-reactive.js"></script>
 <script src="./kvue.js"></script>
@@ -7,7 +9,8 @@
   const app = new Vue({
     el: '#app',
     data: {
-      count: 1
+      count: 1,
+      html: '<span style="color: red">span</span>'
     }
   })
 
