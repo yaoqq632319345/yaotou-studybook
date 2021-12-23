@@ -8,6 +8,7 @@ function defineReactive(obj, key, val) {
     set (nval) {
       if (nval !== val) {
         console.log('set', key);
+        observe(nval)
         val = nval
       }
     }
@@ -18,5 +19,3 @@ function observe(obj) {
   if (typeof obj !== 'object' || obj == null) return
   Object.keys(obj).forEach(key => defineReactive(obj, key, obj[key]))
 }
-const obj = {}
-defineReactive(obj, 'foo', 'foo')
