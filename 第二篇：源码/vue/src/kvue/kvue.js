@@ -59,26 +59,76 @@ class Compile {
       }
     })
   }
-  isDir(name) {return name.startsWith('v-')}
+  // 统一处理动态绑定
+  update (node, exp, dir) {
+    // 1.初始化
+    const fn = this[dir + 'Updater']
+    fn && fn(node, this.$vm[exp])
+    // 2.创建watcher
+    new Watcher(this.$vm, exp, function (val) {
+      fn && fn(node, val)
+    })
+  }
+  // 解析{{}} & 指令
+  compileText (node) {
+    this.update(node, RegExp.$1, 'text')
+  }
   text(node, exp) {
-    node.textContent = this.$vm[exp]
+    this.update(node, exp, 'text')
+  }
+  textUpdater (node, val ) {
+    node.textContent = val
   }
   html (node, exp) {
-    node.innerHTML = this.$vm[exp]
+    this.update(node, exp, 'html')
   }
-
-
-  // 解析{{}}
-  compileText (node) {
-    console.log(RegExp.$1);
-    node.textContent = this.$vm[RegExp.$1]
+  htmlUpdater (node, val) {
+    node.innerHTML = val
   }
-
+  
+  
+  
+  isDir(name) {return name.startsWith('v-')}
   isElement(node) {
     return node.nodeType === 1
   }
 
   isInter(node) {
     return node.nodeType === 3 && /\{\{(.*)\}\}/.test(node.textContent)
+  }
+}
+
+class Watcher {
+  constructor (vm, key, updater) {
+    this.vm = vm
+    this.key = key
+    this.updater = updater
+
+    // 读当前值，触发依赖
+    Dep.target = this
+
+    this.vm[this.key]
+
+    Dep.target = null
+  }
+
+  update () {
+    const val = this.vm[this.key]
+    this.updater.call(this.vm, val)
+  }
+}
+
+// dep 和响应式key有对应关系
+class Dep {
+  constructor () {
+    this.deps = []
+  }
+  addDep (dep) {
+    this.deps.push(dep)
+  }
+  notify () {
+    this.deps.forEach(d => {
+      d.update()
+    })
   }
 }

@@ -1,15 +1,20 @@
 function defineReactive(obj, key, val) {
   observe(val)
+
+  const dep = new Dep()
   Object.defineProperty(obj, key, {
     get () {
-      console.log('get', key);
+      // console.log('get', key);
+
+      if (Dep.target) dep.addDep(Dep.target)
       return val
     },
     set (nval) {
       if (nval !== val) {
-        console.log('set', key);
+        // console.log('set', key);
         observe(nval)
         val = nval
+        dep.notify()
       }
     }
   })
