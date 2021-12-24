@@ -48,6 +48,11 @@ class Compile {
             const dir = attrName.substring(2)
             this[dir] && this[dir](node, exp)
           }
+          // 判断事件
+          if (this.isEvent(attrName)) {
+            const dir = attrName.substring(1)
+            this.eventHandler(node, exp, dir)
+          }
         })
         // 递归
         if (node.childNodes.length > 0) {
@@ -79,6 +84,15 @@ class Compile {
   textUpdater (node, val ) {
     node.textContent = val
   }
+  model (node, exp) {
+    this.update(node, exp, 'model')
+    node.addEventListener('input', e => {
+      this.$vm[exp] = e.target.value
+    })
+  }
+  modelUpdater (node, val) {
+    node.value = val
+  }
   html (node, exp) {
     this.update(node, exp, 'html')
   }
@@ -86,8 +100,10 @@ class Compile {
     node.innerHTML = val
   }
   
-  
-  
+  eventHandler (node, exp, dir) {
+    node.addEventListener(dir, this.$vm.$options.methods[exp].bind(this.$vm))
+  }  
+  isEvent (name) {return name.startsWith('@')}
   isDir(name) {return name.startsWith('v-')}
   isElement(node) {
     return node.nodeType === 1

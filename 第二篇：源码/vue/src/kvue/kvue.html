@@ -1,5 +1,6 @@
 <div id="app">
-  <h1>{{count}}</h1>
+  <h1 @click="add">{{count}}</h1>
+  <input type="text" v-model="count">
   <p v-text="count"></p>
   <P v-html="html"></P>
 </div>
@@ -10,11 +11,18 @@
     el: '#app',
     data: {
       count: 1,
-      html: '<span style="color: red">span</span>'
+      html: '<span style="color: red">span</span>',
+      arr: [1, 2]
+    },
+    methods: {
+      add () {
+        this.count++
+      }
     }
   })
 
-  setInterval(() => {
-    app.count++
-  }, 1000)
+  // setInterval(() => {
+  //   app.count++
+  //   app.arr.push(3)
+  // }, 1000)
 </script>
