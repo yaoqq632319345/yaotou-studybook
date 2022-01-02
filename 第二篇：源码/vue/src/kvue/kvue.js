@@ -9,7 +9,71 @@ class Vue {
     proxy(this)
 
     // 2.编译模板
-    new Compile(options.el, this)
+    // new Compile(options.el, this)
+
+    // 挂载$mount
+    if (options.el) {
+      this.$mount(options.el)
+    }
+  }
+
+  $mount (el) {
+    // 1.获取宿主
+    this.$el = document.querySelector(el)
+
+    // 2 执行render
+    const updateComponent = () => {
+      const vnode = this.$options.render.call(this, this.$createElement)
+      this._update(vnode)
+      // const parent = this.$el.parentElement
+
+      // parent.insertBefore(vnode, this.$el.nextSibling)
+      // parent.removeChild(this.$el)
+      // this.$el = vnode
+    }
+
+    new Watcher(this, updateComponent)
+  }
+
+  $createElement(tag, props, children) {
+    return { tag, props, children }
+  }
+
+  _update (vnode) {
+    const prevVnode = this._vnode
+    if (!prevVnode) {
+      this.__patch__(this.$el, vnode)
+    } else {
+      this.__patch__(prevVnode, vnode)
+
+    }
+
+    this._vnode = vnode
+  }
+
+  __patch__ (oldVnode, vnode) {
+    if (oldVnode.nodeType) {
+      const parent = oldVnode.parentElement
+      const ref = oldVnode.nextSibling
+      const dom = this.$createElm(vnode)
+      parent.insertBefore(dom, ref)
+      parent.removeChild(oldVnode)
+    } else {
+      // diff
+    }
+  }
+
+  $createElm (vnode) {
+    const dom = document.createElement(vnode.tag)
+
+    if (vnode.children) {
+      if (typeof vnode.children === 'number') {
+        dom.textContent = vnode.children
+      }
+    }
+
+    vnode.elm = dom
+    return dom
   }
 }
 
@@ -115,32 +179,31 @@ class Compile {
 }
 
 class Watcher {
-  constructor (vm, key, updater) {
+  constructor (vm, updater) {
     this.vm = vm
-    this.key = key
     this.updater = updater
-
-    // 读当前值，触发依赖
+    this.get()
+    
+  }
+  get () {
     Dep.target = this
 
-    this.vm[this.key]
+    this.updater.call(this.vm)
 
     Dep.target = null
   }
-
   update () {
-    const val = this.vm[this.key]
-    this.updater.call(this.vm, val)
+    this.get()
   }
 }
 
 // dep 和响应式key有对应关系
 class Dep {
   constructor () {
-    this.deps = []
+    this.deps = new Set()
   }
   addDep (dep) {
-    this.deps.push(dep)
+    this.deps.add(dep)
   }
   notify () {
     this.deps.forEach(d => {
