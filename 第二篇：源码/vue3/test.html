@@ -1,0 +1,67 @@
+<div id="app">
+  <h3>{{title}}</h3>
+</div>
+<!-- <script src="http://unpkg.com/vue@next"></script> -->
+<script>
+  const Vue = {
+    createApp (opts) {
+      return {
+        mount (el) {
+          const p = document.querySelector(el)
+
+          if (!opts.render) {
+            opts.render = this.complie(p.innerHTML)
+          }
+          
+          // 設置setup
+          if (opts.setup) {
+            this.setupState = opts.setup()
+          }
+
+          if (opts.data) {
+            this.data = opts.data()
+          }
+
+          this.proxy = new Proxy(this, {
+            get (target, key) {
+              if (key in target.setupState) {
+                return target.setupState[key]
+              } else {
+                return target.data[key]
+              }
+            },
+            set () {}
+          })
+
+          let dom = opts.render.call(this.proxy)
+          p.innerHTML = ''
+          p.appendChild(dom)
+        },
+        complie (template) {
+          return function render () {
+            const h3 = document.createElement('h3')
+            h3.innerText = this.title
+
+            return h3
+          }
+        }
+      }
+    },
+    createRenderer() {
+
+    }
+  }
+</script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        title: "hello, vue3!"
+      };
+    },
+    setup() {
+      return { title: 'vu3, hello!' }
+    }
+  });
+  app.mount("#app");
+</script>
