@@ -1,4 +1,4 @@
-<script src="./promise.js"></script>
+<!-- <script src="./promise.js"></script>
 <script>
   console.log(MyPromise.resolve);
   const promise = new MyPromise((resolve, reject) => {
@@ -25,4 +25,48 @@ promise
     console.log(3);
     console.log("resolve", value);
   });
+</script> -->
+<!-- <script>
+
+  Function.prototype.bind2 = function(oThis) {
+    if (typeof this !== "function") {
+      // 与 ECMAScript 5 最接近的
+      // 内部 IsCallable 函数
+      throw new TypeError('aaaaa');
+    }
+    var aArgs = Array.prototype.slice.call( arguments, 1 ),
+      fToBind = this,
+      fNOP = function(){},
+      fBound = function(){
+        return fToBind.apply((this instanceof fNOP && oThis ? this : oThis), aArgs.concat(Array.prototype.slice.call( arguments )))
+      };
+    fNOP.prototype = this.prototype;
+    fBound.prototype = new fNOP();
+    return fBound
+  }
+
+
+  function Test (name) {
+    this.name = name
+  }
+
+  let Test2 = Test.bind2({c: 1})
+
+  let t = new Test2('name2')
+
+  console.log(t);
+</script> -->
+
+
+<script>
+  let A = (b) => {
+    return b
+  }
+
+  function B (b) {
+    return b
+  }
+
+  console.dir(A);
+  console.dir(B);
 </script>
