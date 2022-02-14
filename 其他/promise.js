@@ -11,6 +11,9 @@
  *    1.then方法必须返回一个promise对象
  *
  */
+// promise 就是接受一个函数，并执行这个函数，然后将resolve 和 reject 成功和失败的两个关键函数交给这个函数，由这个函数来决定什么时候调用失败或者成功
+// 然后通过then方法收集成功函数 catch方法收集失败函数
+// 由于先调用的new promise传入的函数，后执行的then 和catch收集，所以需要保证resolve和reject是一个异步函数，当resolve和reject被调用时，保证收集到then和catch中函数
 
 class MyPromise {
   static PENDING = "pending"; // 进行中
