@@ -1,0 +1,196 @@
+<!-- <style>
+  div {
+    height: 200px;
+  }
+  .left {
+    width: 200px;
+    background: #000;
+  }
+  .right {
+    width: 200px;
+    background: red;
+  }
+  .center {
+    background: blue;
+  }
+</style> -->
+<!-- 两栏布局  -->
+<!-- /* BFC overflow: auto;*/ -->
+<!--  /* margin */ margin-left: 200px;-->
+<!--  /* flex */ -->
+<!-- <style>
+        .left {
+          float: left;
+        }
+        .right {
+          /* overflow: auto;  */
+        }
+        </style>
+
+        <div class="wrap">
+          <div class="left"></div>
+          <div class="right"></div>
+        </div> -->
+
+<!-- 三栏布局 -->
+<!-- 圣杯 父级padding，三栏浮动 左右margin负-->
+<!-- <style>
+    .wrap {
+      padding: 0 200px;
+    }
+    .left {
+      float: left;
+      margin-left: -200px;
+    }
+    .right {
+      float: left;
+      margin-right: -200px;
+    }
+    .center {
+      float: left;
+      width: 100%;
+    }
+  </style> -->
+<!-- 双飞翼 三栏浮动 右边两个margin负，中间宽度100%， 内部margin-->
+  <!-- <style>
+    .wrap {
+    }
+    .left {
+      float: left;
+    }
+    .right {
+      float: left;
+      margin-left: -200px;
+    }
+    .center {
+      float: left;
+      margin-left: -200px;
+      width: 100%;
+    }
+    .inner {
+      margin: 0 200px;
+    }
+  </style> -->
+
+<!-- BFC -->
+  <!-- <style>
+    .left {
+      float: left;
+    }
+    .right {
+      float: right;
+    }
+    .center {
+      overflow: hidden;
+    }
+  </style> -->
+<!-- <div class="wrap">
+  <div class="left"></div>
+  <div class="right"></div>
+  <div class="center">
+    <div class="inner"></div>
+  </div>
+</div> -->
+
+
+
+
+
+<!-- 多列等高 -->
+    <!-- <style>
+      .wrap {
+        overflow: hidden;
+      }
+      .item {
+        float: left;
+        width: 33.3%;
+        background: red;
+        padding-bottom: 1000px;
+        margin-bottom: -1000px;
+      }
+    </style>
+    <div class="wrap">
+      <div class="item">
+        <p>1111</p>
+      </div>
+      <div class="item">
+        <p>22222</p>
+        <p>22222</p>
+        <p>22222</p>
+        <p>22222</p>
+      </div>
+      <div class="item">
+        <p>33333</p>
+      </div>
+    </div> -->
+
+
+
+<!-- grid grid -->
+<style>
+  .wrap {
+    display: grid;
+    height: 400px;
+    /* grid-template-columns: 100px 100px 100px;  */
+    /* grid-template-rows: repeat(3, 100px); */
+/* 1.repeat()
+    repeat(3, 100px)
+    确定个数和宽度，重复操作
+    */
+/* 2.auto-fill
+    不确定个数，确定宽度，自动填充
+    */
+    grid-template-columns: repeat(auto-fill, 500px);
+
+/* 3. fr 关键字，代表单位
+    */
+    grid-template-rows: 1fr 2fr;
+
+/* 4.minmax()
+    取值范围
+    */
+
+/* 5.auto 关键字
+    自动宽度
+    */
+
+/* 6.网格线的名称 
+    grid-template-columns属性和grid-template-rows属性里面，还可以使用方括号，指定每一根网格线的名字
+    []中可以有多个名字
+    grid-template-columns: [c1 c11] 100px [c2] 100px [c3] auto [c4];
+    */
+
+/* 7.间隔 
+    gap
+    row-gap
+    column-gap
+    */
+
+/* 8.grid-template-areas */  
+/* ==========================给区域命名，子元素调用================================= */
+
+/* 9.grid-auto-flow
+    排列顺序  row / column
+    */
+  }
+  .item {
+    background: yellow;
+    text-align: center;
+    line-height: 100%;
+    font-size: 50px;
+    font-weight: 900;
+  }
+
+
+  .item {
+    display: inline-grid;
+  }
+</style>
+<div class="wrap">
+  <div class="item">1</div>
+  <div class="item">2</div>
+  <div class="item">3</div>
+  <div class="item">4</div>
+  <div class="item">5</div>
+  <div class="item">6</div>
+</div>
