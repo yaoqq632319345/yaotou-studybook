@@ -58,15 +58,54 @@ promise
 </script> -->
 
 
+<!-- <script>
+   // 模拟异步请求
+const request = (url, time) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(`任务 ${url.padEnd(10, ' ')}完成`)
+    }, 1000 * time)
+  })
+}
+
+/**
+ * 并发控制函数
+ * @param {*} tasks
+ * @param {*} max
+ */
+async function myAsyncPool(tasks = [], max = 3) {
+  // 正在执行的任务数组
+  let pool = []
+  for (let i = 0; i < tasks.length; i++) {
+    // 生成异步任务
+    const task = request(tasks[i], i)
+    // 添加到正在执行的任务数组
+    pool.push(task)
+    task.then((data) => {
+      // 当任务执行完毕, 将其从正在执行任务数组中移除
+      console.log(`${data}; 当前并发数: ${pool.length}`)
+      pool.splice(pool.indexOf(task), 1)
+    })
+
+    // 当并发池满了, 就先去执行并发池中的任务, 有任务执行完成后, 再继续循环
+    if (pool.length === max) {
+      console.log(123123);
+      await Promise.race(pool)
+    }
+  }
+}
+const tasks = new Array(10).fill('').map((task, i) => `url - ${i + 1}`)
+myAsyncPool(tasks, 3)
+</script> -->
+<style>
+</style>
+<img src="" alt="">
+<button class="class">点击</button>
 <script>
-  let A = (b) => {
-    return b
-  }
+console.log(document.body.contains(document.querySelector('button')));
+console.log(document.querySelector('button').matches('.clas'));
 
-  function B (b) {
-    return b
-  }
-
-  console.dir(A);
-  console.dir(B);
+document.querySelector('button').addEventListener('click', e => {
+  console.log(e.target);
+}, true)
 </script>
